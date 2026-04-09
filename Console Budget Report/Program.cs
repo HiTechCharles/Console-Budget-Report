@@ -250,7 +250,7 @@ namespace Console_Budget_Report
         {
             using (var synth = new SpeechSynthesizer { Rate = 3, Volume = 100 })
             {
-                Synth.rate = 3;
+                synth.Rate = 3;
                 synth.Volume = 100;
                 Console.Clear();
                 Console.WriteLine(content);
