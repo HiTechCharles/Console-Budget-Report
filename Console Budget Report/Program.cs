@@ -379,11 +379,18 @@ namespace Console_Budget_Report
                     continue;
 
                 var name = parts[0].Trim();
+                // Truncate name to 20 characters
+                if (name.Length > 20)
+                    name = name.Substring(0, 20);
+
                 if (double.TryParse(parts[1].Trim(), NumberStyles.Number, CultureInfo.CurrentCulture, out double amount))
                 {
                     transactions.Add(new Transaction(name, amount));
                 }
             }
+
+            // Sort by amount descending (highest to lowest)
+            transactions.Sort((a, b) => b.Amount.CompareTo(a.Amount));
         }
 
         static void EditFile(string filename)
