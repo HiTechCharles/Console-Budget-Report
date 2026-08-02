@@ -29,7 +29,6 @@ namespace Console_Budget_Report
         #region CONFIG
         // Improved fallback to My Documents with better null handling
         public static readonly string BaseFolder = Path.Combine(
-            Environment.GetEnvironmentVariable("OneDriveConsumer") ??
             Environment.GetFolderPath(Environment.SpecialFolder.MyDocuments),
             "Console Budget Report");
 
