@@ -1,9 +1,11 @@
-﻿using System;
+﻿using ShadowFlame;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
+using System.Diagnostics.Metrics;
 using System.Globalization;
 using System.IO;
-using System.Speech.Synthesis;
+using System.Media;
 
 namespace Console_Budget_Report
 {
@@ -49,6 +51,11 @@ namespace Console_Budget_Report
         public static double LeftOver { get; private set; }
         #endregion
 
+        #region SPEECH
+        static ShadowFlame.TTS _tts = new ShadowFlame.TTS();
+        #endregion
+
+
         static void Main()
         {
             Console.Title = "Console Budget Report";
@@ -60,14 +67,14 @@ namespace Console_Budget_Report
             }
             catch (Exception ex)
             {
-                Console.WriteLine($"Error creating application directory: {ex.Message}");
+                _tts.SpeakAndDisplay($"Error creating application directory: {ex.Message}");
                 WaitForKeyPress("Press any key to exit...");
                 return;
             }
 
-            Print("Console Budget Report");
-            Print("This program will help you create a budget.");
-            Print("Type income and expense names and amounts (CSV: NAME,AMOUNT).");
+            _tts.SpeakAndDisplay("Console Budget Report");
+            _tts.SpeakAndDisplay("This program will help you create a budget.");
+            _tts.SpeakAndDisplay("Type income and expense names and amounts (CSV: NAME,AMOUNT).");
 
             EnsureDataFilesExist();
             LoadFiles();
@@ -84,15 +91,16 @@ namespace Console_Budget_Report
             {
                 if (printOptions)
                 {
-                    Print("\n\n-----MAIN MENU");
-                    Print("     D - Display Budget");
-                    Print("     I - Edit Income List");
-                    Print("     E - Edit Expense List");
-                    Print("     X - Exit");
+                    _tts.SpeakAndDisplay("\n\n-----MAIN MENU");
+                    _tts.SpeakAndDisplay("     D - Display Budget");
+                    _tts.SpeakAndDisplay("     I - Edit Income List");
+                    _tts.SpeakAndDisplay("     E - Edit Expense List");
+                    _tts.SpeakAndDisplay("     X - Exit");
                 }
 
                 char choice = WaitForKeyPress("\n\nWhat would you like to do?");
                 printOptions = true; // Reset for next iteration
+                _tts.Stop();
 
                 switch (choice)
                 {
@@ -110,6 +118,7 @@ namespace Console_Budget_Report
                         break;
                     default:
                         printOptions = false;
+                        _tts.Stop();
                         break;
                 }
             }
@@ -202,18 +211,18 @@ namespace Console_Budget_Report
             {
                 if (printOptions)
                 {
-                    Print("\nBudget report is ready, What would you like to do?");
-                    Print("     M - Return to Main Menu");
-                    Print("     X - Exit");
-                    Print("     D - Display on Screen");
-                    Print("     O - Open Report File");
-                    Print("     S - Speak & Display");
+                    _tts.SpeakAndDisplay("\nBudget report is ready, What would you like to do?");
+                    _tts.SpeakAndDisplay("     M - Return to Main Menu");
+                    _tts.SpeakAndDisplay("     X - Exit");
+                    _tts.SpeakAndDisplay("     D - Display on Screen");
+                    _tts.SpeakAndDisplay("     O - Open Report File");
                 }
 
                 SaveReport();
                 string budgetContents = File.ReadAllText(BudgetReportPath);
                 char choice = WaitForKeyPress();
                 printOptions = true;
+                _tts.Stop();
 
                 switch (choice)
                 {
@@ -224,9 +233,6 @@ namespace Console_Budget_Report
                         break;
                     case 'd':
                         DisplayOnScreen(budgetContents);
-                        return;
-                    case 's':
-                        SpeakAndDisplay(budgetContents);
                         return;
                     case 'o':
                         OpenReportFile();
@@ -241,21 +247,8 @@ namespace Console_Budget_Report
         static void DisplayOnScreen(string content)
         {
             Console.Clear();
-            Console.WriteLine(content);
+            _tts.SpeakAndDisplay(content);
             WaitForKeyPress("\nPress a key to return to main menu...");
-        }
-
-        static void SpeakAndDisplay(string content)
-        {
-            using (var synth = new SpeechSynthesizer { Rate = 3, Volume = 100 })
-            {
-                synth.Rate = 3;
-                synth.Volume = 100;
-                Console.Clear();
-                Console.WriteLine(content);
-                synth.SpeakAsync(content);
-                WaitForKeyPress("\nPress a key to return to main menu...");
-            }
         }
 
         static void OpenReportFile()
@@ -330,23 +323,15 @@ namespace Console_Budget_Report
                     if (value >= low && value <= high)
                         return value;
 
-                    System.Media.SystemSounds.Asterisk.Play();
+                    SystemSounds.Asterisk.Play();
                     Console.WriteLine($"Value must be between {low} and {high}.");
                 }
                 else
                 {
-                    System.Media.SystemSounds.Asterisk.Play();
+                    SystemSounds.Asterisk.Play();
                     Console.WriteLine("Invalid number format.");
                 }
             }
-        }
-
-        static void Print(string msg = "", bool sameLine = false)
-        {
-            if (sameLine)
-                Console.Write(msg);
-            else
-                Console.WriteLine(msg);
         }
 
         static void LoadFiles()
@@ -395,12 +380,12 @@ namespace Console_Budget_Report
         static void EditFile(string filename)
         {
             Console.Clear();
-            Print("HOW TO EDIT THE INCOME & EXPENSE FILES:\n");
-            Print("Columns: Name and Amount separated by a comma.");
-            Print("Example:");
-            Print("Social Security,900.00");
-            Print("Work Income - Example Company,9598.00");
-            Print("cell phone,266.86");
+            _tts.SpeakAndDisplay("HOW TO EDIT THE INCOME & EXPENSE FILES:\n");
+            _tts.SpeakAndDisplay("Columns: Name and Amount separated by a comma.");
+            _tts.SpeakAndDisplay("Example:");
+            _tts.SpeakAndDisplay("Social Security,900.00");
+            _tts.SpeakAndDisplay("Work Income - Example Company,9598.00");
+            _tts.SpeakAndDisplay("cell phone,266.86");
             WaitForKeyPress("\nPress a key to open the file...");
 
             try

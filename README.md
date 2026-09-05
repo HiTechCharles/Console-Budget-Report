@@ -7,15 +7,15 @@ A simple and intuitive console-based budgeting application for Windows that help
 - 📊 **Budget Tracking**: Manage income sources and expenses in separate CSV files
 - 💰 **Automatic Calculations**: Computes totals, percentages, and leftover money
 - 📄 **Report Generation**: Creates formatted monthly budget reports
-- 🔊 **Text-to-Speech**: Option to have your budget read aloud
+- 🔊 **Text-to-Speech**: Speaks all program text and budget reports
 - 📝 **Easy Editing**: Edit income and expense files directly in Notepad
 - 💾 **Data Persistence**: Stores data in CSV format in your Documents folder
 
 ## Requirements
 
-- Windows Operating System
-- .NET Framework 4.8.1
-- Notepad (for file editing)
+- .NET 10 SDK (required to build and run)
+- Windows 10/11 (recommended). The application is a console app and is tested on Windows.
+- Notepad or any text editor (for CSV file editing)
 
 ## Installation
 
@@ -24,9 +24,15 @@ A simple and intuitive console-based budgeting application for Windows that help
    git clone https://github.com/HiTechCharles/Console-Budget-Report.git
    ```
 
-2. Open the solution in Visual Studio
+2. Using the dotnet CLI (recommended):
+   ```powershell
+   cd Console-Budget-Report
+   dotnet restore
+   dotnet build
+   dotnet run --project "Console Budget Report.csproj"
+   
 
-3. Build and run the application
+   Or open the solution in Visual Studio 2022/2024/2026 and Build -> Run.
 
 ## Usage
 
@@ -36,10 +42,11 @@ On first launch, the application will:
 - Create a folder in your OneDrive Documents or My Documents: `Console Budget Report`
 - Generate example `income.csv` and `expenses.csv` files
 - Create a `Monthly Budget.txt` report file
+- Prompt you to enable text-to-speech functionality
 
 ### Main Menu Options
 
-- **D** - Display Budget: View, save, or speak your budget report
+- **D** - Display Budget: View, exit, or return to the main menu
 - **I** - Edit Income List: Modify your income sources
 - **E** - Edit Expense List: Modify your expenses
 - **X** - Exit: Close the application
@@ -48,7 +55,6 @@ On first launch, the application will:
 
 When viewing your budget, you can:
 - **D** - Display on Screen: View the budget report in the console
-- **S** - Speak & Display: Hear the budget read aloud while viewing
 - **O** - Open Report File: Open the budget report in your default text editor
 - **M** - Return to Main Menu
 - **X** - Exit the application
@@ -110,11 +116,11 @@ Each entry shows:
 
 ## Technical Details
 
-- **Language**: C# (.NET Framework 4.8.1)
+- **Language**: C# (.NET 10)
 - **Architecture**: Console Application
 - **Key Features**:
   - CSV parsing with error handling
-  - Text-to-speech synthesis
+  - Text-to-speech synthesis (Windows SAPI)
   - File I/O with exception handling
   - Process management for opening external editors
 

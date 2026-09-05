@@ -1,0 +1,4 @@
+<Solution>
+  <Project Path="../ShadowFlame/ShadowFlame/ShadowFlame.csproj" />
+  <Project Path="Console-Budget-Report/Console-Budget-Report.csproj" />
+</Solution>
