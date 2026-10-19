@@ -52,7 +52,7 @@ namespace Console_Budget_Report
         #endregion
 
         #region SPEECH
-        static ShadowFlame.TTS _tts = new ShadowFlame.TTS();
+        private static ConsoleTTS _tts = new ConsoleTTS(); //text to speech object
         #endregion
 
 
@@ -60,6 +60,7 @@ namespace Console_Budget_Report
         {
             Console.Title = "Console Budget Report";
             Console.ForegroundColor = ConsoleColor.White;
+            Task.WaitAll(_tts?.InitializeAsync() ?? Task.CompletedTask);  //
 
             try
             {
@@ -86,6 +87,7 @@ namespace Console_Budget_Report
         {
             bool running = true;
             bool printOptions = true;
+            _tts.Stop();
 
             while (running)
             {
@@ -387,6 +389,7 @@ namespace Console_Budget_Report
             _tts.SpeakAndDisplay("Work Income - Example Company,9598.00");
             _tts.SpeakAndDisplay("cell phone,266.86");
             WaitForKeyPress("\nPress a key to open the file...");
+            _tts.Stop();
 
             try
             {
